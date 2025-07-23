@@ -22,28 +22,4 @@ async def on_ready():
 
 
 
-
-
-@bot.slash_command(
-    guild_ids = guild_ids,
-    name = "hello",
-    description = "Says hello to you!"
-)
-@commands.cooldown(
-    1, 15, commands.BucketType.user
-)
-async def hello(
-        ctx: discord.ApplicationContext
-    ):
-    items: List[Item] | None = await db.getItemList()
-    crates: List[Crate] | None = await db.getCrateList()
-    if items and crates:
-        item = items[1]
-        crate = [x for x in crates if x.id == item.CrateID][0]
-        
-        await ctx.respond(f"`{item.ItemName}` comes from the `{crate.CrateName}` Crate")
-    else:
-        await ctx.respond("None")
-
-
 bot.run(token)
