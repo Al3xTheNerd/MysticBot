@@ -44,7 +44,7 @@ class ItemSearch(commands.Cog):
         name = "item",
         description = "Search for an item by name.")
     @option("item", description="Pick an item!", autocomplete = itemNameTabComplete)
-    async def itemCommand(self,
+    async def itemSearchCommand(self,
                           ctx: discord.ApplicationContext,
                           item: str):
         itemsList = await getItemList()
@@ -57,7 +57,7 @@ class ItemSearch(commands.Cog):
         if not crateList:
             raise NoCratesInDatabaseError
         itemObject = [x for x in itemsList if x.ItemName == item][0]
-        embed = itemToEmbed(itemObject, crateList)
+        embed = await itemToEmbed(itemObject, crateList)
         await ctx.respond(embed = embed)
         
     
