@@ -87,7 +87,7 @@ class ItemSearch(commands.Cog):
     @search.command(
         guild_ids = guild_ids,
         name = "term",
-        decription = "Search for a word or phrase through the item's lore."
+        description = "Search for a word or phrase through the item's lore."
     )
     @option("term", description = "Enter a phrase!", input_type = str)
     async def termSearchCommand(self,
