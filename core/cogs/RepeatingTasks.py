@@ -44,13 +44,21 @@ class RepeatingTasksCog(commands.Cog):
                 itemsList = await db.getItemList()
                 if itemsList:
                     itemToUse = random.choice(itemsList)
+                    for symbol in ["✦", "❂", "■", "☀", "☠", "▲", "❃", "◇", "✿"]:
+                        itemToUse.ItemName = itemToUse.ItemName.replace(f"{symbol} ", "").replace(f" {symbol}", "")
                     options = [
-                        f"{itemToUse.ItemName} is pretty cool."
+                        f"{itemToUse.ItemName} is pretty cool.",
+                        f"{itemToUse.ItemName} - {itemToUse.WinPercentage}%"
                     ]
                     status = random.choice(options)
             case 4:
                 options = [
-                    f"Beaver Fever!"
+                    "Beaver Fever!",
+                    "Salt you later!",
+                    "Am I alive?",
+                    "Feelin' Feral!",
+                    "Playin' with fire.",
+                    "Not a nerd!"
                 ]
                 status = random.choice(options)
         await self.bot.change_presence(activity = discord.Activity(name = "custom", state = f"{status}", type=discord.ActivityType.custom),
