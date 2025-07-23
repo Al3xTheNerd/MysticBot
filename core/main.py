@@ -1,12 +1,8 @@
 import discord
-from discord.ext import commands
-from typing import List
 
 
-from atn import token, guild_ids, cogs
+from atn import token, cogs
 import db as db
-from models.Item import Item
-from models.Crate import Crate
 
 
 bot = discord.Bot(
