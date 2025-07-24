@@ -35,12 +35,10 @@ class ItemSearch(commands.Cog):
         self.bot: discord.Bot = bot
     
     search = SlashCommandGroup("search",
-                               description = "Commands relating to searching.",
-                               guild_ids = guild_ids)
+                               description = "Commands relating to searching.")
     
     
     @search.command(
-        guild_ids = guild_ids,
         name = "item",
         description = "Search for an item by name.")
     @option("item", description="Pick an item!", autocomplete = itemNameTabComplete)
@@ -62,7 +60,6 @@ class ItemSearch(commands.Cog):
         
     
     @search.command(
-        guild_ids = guild_ids,
         name = "tag",
         description = "Search for items with a designated tag.")
     @option("tag", description = "Pick a tag!", autocomplete = tagNameTabComplete)
@@ -85,7 +82,6 @@ class ItemSearch(commands.Cog):
         await paginator.respond(ctx.interaction, ephemeral = False)
         
     @search.command(
-        guild_ids = guild_ids,
         name = "term",
         description = "Search for a word or phrase through the item's lore."
     )
@@ -107,7 +103,6 @@ class ItemSearch(commands.Cog):
         await paginator.respond(ctx.interaction, ephemeral = False)
         
     @search.command(
-        guild_ids = guild_ids,
         name = "crate",
         description = "Search by Crate."
     )

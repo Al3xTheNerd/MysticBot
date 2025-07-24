@@ -5,8 +5,18 @@ from atn import token, cogs
 import db as db
 
 
+
 bot = discord.Bot(
-    intents = discord.Intents.none()
+    intents = discord.Intents.none(),
+    default_command_integration_types = {
+        discord.IntegrationType.user_install,
+        discord.IntegrationType.guild_install
+    },
+    default_command_contexts = {
+        discord.InteractionContextType.guild,
+        discord.InteractionContextType.bot_dm,
+        discord.InteractionContextType.private_channel
+    }
 )
 for cog in cogs:
     bot.load_extension(cog)
@@ -14,8 +24,6 @@ for cog in cogs:
 async def on_ready():
     if bot.user:
         print(f"Logged in as {bot.user.name}")
-
-
 
 
 bot.run(token)
