@@ -1,13 +1,10 @@
 import discord
-from discord.ext import commands, pages
+from discord.ext import commands
 from discord.commands import option, SlashCommandGroup
-from typing import List
 
 
-from atn import guild_ids
 from db import getItemListTabComplete, getItemList, getCrateList, getTagList
-from models.Crate import Crate
-from models.Item import Item, itemToEmbed
+from models.Item import itemToEmbed
 from cogs.ErrorDefinitions import *
 from utils import buildPaginator
 
