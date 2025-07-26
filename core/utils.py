@@ -2,12 +2,12 @@ import discord
 from discord.ext import pages
 from typing import List
 
-
-
-
-
 from db import getCrateList
-from atn import *
+
+
+
+
+
 
 def buildPaginator(pageList: List[discord.Embed]):
     pagelist = [

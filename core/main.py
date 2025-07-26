@@ -1,7 +1,6 @@
 import discord
 
-
-from atn import token
+from env import token
 import db as db
 
 cogs = [
