@@ -1,10 +1,15 @@
 import discord
 
 
-from atn import token, cogs
+from atn import token
 import db as db
 
-
+cogs = [
+    "cogs.Error",
+    "cogs.RepeatingTasks",
+    "cogs.ItemSearch",
+    "cogs.Misc"
+]
 
 bot = discord.Bot(
     intents = discord.Intents.none(),
