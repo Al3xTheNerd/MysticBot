@@ -1,13 +1,13 @@
 import discord
 
-from env import token
-import db as db
+from core.env import token
+import core.db as db
 
 cogs = [
-    "cogs.Error",
-    "cogs.RepeatingTasks",
-    "cogs.ItemSearch",
-    "cogs.Misc"
+    "Error",
+    "RepeatingTasks",
+    "ItemSearch",
+    "Misc"
 ]
 
 bot = discord.Bot(
@@ -23,7 +23,7 @@ bot = discord.Bot(
     }
 )
 for cog in cogs:
-    bot.load_extension(cog)
+    bot.load_extension(f"core.cogs.{cog}")
 @bot.event
 async def on_ready():
     if bot.user:

@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 
-from cogs.ErrorDefinitions import *
+from core.cogs.ErrorDefinitions import *
 
 
 

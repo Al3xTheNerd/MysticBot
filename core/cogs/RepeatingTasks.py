@@ -3,10 +3,10 @@ from discord.ext import commands, tasks
 from typing import List
 
 
-import db
-from env import webAddress
-from models.Item import Item, dictToItem
-from models.Crate import Crate, dictToCrate
+import core.db as db
+from core.env import webAddress
+from core.models.Item import Item, dictToItem
+from core.models.Crate import Crate, dictToCrate
 
 
 

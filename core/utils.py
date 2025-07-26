@@ -2,7 +2,7 @@ import discord
 from discord.ext import pages
 from typing import List
 
-from db import getCrateList
+from core.db import getCrateList
 
 
 

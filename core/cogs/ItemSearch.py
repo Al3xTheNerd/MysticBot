@@ -3,10 +3,10 @@ from discord.ext import commands
 from discord.commands import option, SlashCommandGroup
 
 
-from db import getItemListTabComplete, getItemList, getCrateList, getTagList
-from models.Item import itemToEmbed
-from cogs.ErrorDefinitions import *
-from utils import buildPaginator
+from core.db import getItemListTabComplete, getItemList, getCrateList, getTagList
+from core.models.Item import itemToEmbed
+from core.cogs.ErrorDefinitions import *
+from core.utils import buildPaginator
 
 async def itemNameTabComplete(ctx: discord.AutocompleteContext):
     itemsList = await getItemListTabComplete()

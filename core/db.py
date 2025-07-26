@@ -2,9 +2,9 @@ from typing import Dict, List
 from pickledb import AsyncPickleDB
 
 
-from env import databaseFile
-from models.Item import Item, dictToItem
-from models.Crate import Crate, dictToCrate
+from core.env import databaseFile
+from core.models.Item import Item, dictToItem
+from core.models.Crate import Crate, dictToCrate
 
 
 async def updateItemList(items: List[Item]) -> bool:

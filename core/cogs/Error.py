@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-from cogs.ErrorDefinitions import *
+from core.cogs.ErrorDefinitions import *
 
 class ErrorCog(commands.Cog):
     def __init__(self, bot):

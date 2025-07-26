@@ -5,8 +5,8 @@ import discord
 
 
 
-from env import itemImageAddress, itemSoloAddress
-from models.Crate import Crate
+from core.env import itemImageAddress, itemSoloAddress
+from core.models.Crate import Crate
 
 @dataclass
 class Item:
