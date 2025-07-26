@@ -23,7 +23,7 @@ for cog in cogs:
 @bot.event
 async def on_ready():
     if bot.user:
-        print(f"Logged in as {bot.user.name}")
+        print(f"Logged in as {bot.user.name} with Pycord [v{discord.__version__}]")
 
 
 bot.run(token)
