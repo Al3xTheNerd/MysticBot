@@ -14,7 +14,8 @@ class ErrorCog(commands.Cog):
             error: discord.DiscordException
         ):
         if isinstance(error, commands.CommandOnCooldown):
-            await ctx.respond(f"You are currently on cooldown with `/{ctx.command.name}`! Try again in `{round(error.retry_after, 1)}` seconds.")
+            if ctx.command:
+                await ctx.respond(f"You are currently on cooldown with `/{ctx.command.name}`! Try again in `{round(error.retry_after, 1)}` seconds.")
         elif isinstance(error, NoItemsInDatabaseError):
             await ctx.respond("No items found in the Database. Please report this to staff.")
         elif isinstance(error, ItemNotInDatabaseError):
