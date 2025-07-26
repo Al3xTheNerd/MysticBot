@@ -1,6 +1,5 @@
 __pycache__/
 *.py[cod]
-Item Parsing/
-atn.py
+.env
 .VSCodeCounter
 database.db
