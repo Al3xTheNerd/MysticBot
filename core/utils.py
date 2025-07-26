@@ -7,7 +7,6 @@ from typing import List
 
 
 from db import getCrateList
-from models.Item import Item
 from atn import *
 
 def buildPaginator(pageList: List[discord.Embed]):
