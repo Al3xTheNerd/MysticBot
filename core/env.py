@@ -3,8 +3,8 @@ import os
 
 load_dotenv()
 
-token = os.environ.get('token')
-webAddress = os.environ.get('webAddress')
-itemSoloAddress = os.environ.get('itemSoloAddress')
-itemImageAddress = os.environ.get('itemImageAddress')
-databaseFile = os.environ.get('databaseFile')
+token = os.environ.get('TOKEN')
+webAddress = os.environ.get('WEBADDRESS')
+itemSoloAddress = os.environ.get('ITEMSOLOADDRESS')
+itemImageAddress = os.environ.get('ITEMIMAGEADDRESS')
+databaseFile = os.environ.get('DATABASEFILE')
