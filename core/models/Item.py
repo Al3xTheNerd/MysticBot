@@ -46,7 +46,7 @@ async def itemToEmbed(item: Item, crateList: List[Crate]) -> discord.Embed:
                       colour=0x00b0f4)
     if item.CrateID:
         crateName = [x for x in crateList if item.CrateID == x.id][0].CrateName
-        embed.add_field(name = "Crate Name",
+        embed.add_field(name = "Crate",
                         value = f"{crateName}",
                         inline = True)
     if item.TagPrimary:
