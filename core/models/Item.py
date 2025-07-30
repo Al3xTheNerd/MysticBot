@@ -61,14 +61,14 @@ async def itemToEmbed(item: Item, crateList: List[Crate]) -> discord.Embed:
         embed.add_field(name = "Tertiary Tag",
                         value = f"{item.TagTertiary}",
                         inline = True)
-    if item.WinPercentage:
-        embed.add_field(name = "Win Percentage",
-                        value = f"{item.WinPercentage}",
-                        inline = True)
-    if item.RarityHuman:
-        embed.add_field(name = "Rarity",
-                        value = f"{item.RarityHuman}",
-                        inline = True)
+    #if item.WinPercentage:
+    #    embed.add_field(name = "Win Percentage",
+    #                    value = f"{item.WinPercentage}",
+    #                    inline = True)
+    #if item.RarityHuman:
+    #    embed.add_field(name = "Rarity",
+    #                    value = f"{item.RarityHuman}",
+    #                    inline = True)
     if item.Notes:
         embed.add_field(name = "Notes",
                         value = f"{item.Notes}",
