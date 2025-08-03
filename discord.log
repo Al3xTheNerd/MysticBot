@@ -1,3 +1,0 @@
-2025-07-31 18:40:54,095:WARNING:discord.state: Guilds intent seems to be disabled. This may cause state related issues.
-2025-07-31 18:40:54,095:WARNING:discord.client: PyNaCl is not installed, voice will NOT be supported
-2025-07-31 18:40:55,051:WARNING:discord.http: We are being rate limited. Retrying in 6.33 seconds. Handled under the bucket "None:None:/applications/{application_id}/commands"
