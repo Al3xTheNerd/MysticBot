@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from discord.commands import option, SlashCommandGroup
-
+import os
 
 from core.db import getItemListTabComplete, getItemList, getCrateList, getTagList
 from core.models.Item import itemToEmbed
@@ -53,7 +53,9 @@ class ItemSearch(commands.Cog):
             raise NoCratesInDatabaseError
         itemObject = [x for x in itemsList if x.ItemName == item][0]
         embed = await itemToEmbed(itemObject, crateList)
-        await ctx.respond(embed = embed)
+        currentPath = os.getcwd()
+        print(currentPath)
+        await ctx.respond(embed = embed, file=discord.File(f"img/{itemObject.id}.png", filename = f"{itemObject.id}.png", description = f"{itemObject.ItemName}"))
         
     
     @search.command(

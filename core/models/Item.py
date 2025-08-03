@@ -74,7 +74,5 @@ async def itemToEmbed(item: Item, crateList: List[Crate]) -> discord.Embed:
                         value = f"{item.Notes}",
                         inline = False)
 
-    embed.set_image(url=f"{itemImageAddress}/{item.id}.png")
-    if embed.image:
-        embed.image.width = 456
+    embed.set_image(url=f"attachment://{item.id}.png")
     return embed
