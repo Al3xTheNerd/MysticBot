@@ -100,3 +100,26 @@ async def getTagList() -> List[str] | None:
             return await database.aget("tags")
     except:
         return None
+
+async def addOneToItemCounter(item: str) -> int | bool:
+    try:
+        with AsyncPickleDB(databaseFile) as database:
+            currentCounts: Dict[str, int] | None = await database.aget("itemCounter")
+            if not currentCounts:
+                currentCounts = {item : 1}
+            else:
+                if item in currentCounts:
+                    currentCounts[item] += 1
+                else:
+                    currentCounts[item] = 1
+            await database.aset("itemCounter", currentCounts)
+        return currentCounts[item] # int
+    except:
+        return False
+
+async def getItemCounter() -> Dict[str, int] | None:
+    try:
+        with AsyncPickleDB(databaseFile) as database:
+            return await database.aget("itemCounter")
+    except:
+        return None

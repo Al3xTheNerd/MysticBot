@@ -43,5 +43,13 @@ async def on_ready():
         print(f"""Logged in as {bot.user.name} with Pycord [v{discord.__version__}]\nDeveloper Mode: {DEV_MODE}\nCommand Count: {len(bot.commands)}
               """)
 
+file_path = "core/commandCount.json"
+
+try:
+    with open(file_path, 'x') as file:
+        pass
+    print(f"File '{file_path}' created successfully.")
+except FileExistsError:
+    print(f"File '{file_path}' already exists.")
 
 bot.run(token)

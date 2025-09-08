@@ -2,15 +2,24 @@ import discord
 from discord.ext import commands
 from discord.commands import option, SlashCommandGroup
 
-from core.db import getItemListTabComplete, getItemList, getCrateList, getTagList
+from core.db import getItemListTabComplete, getItemList, getCrateList, getTagList, addOneToItemCounter, getItemCounter
 from core.models.Item import itemToEmbed
 from core.cogs.ErrorDefinitions import *
 from core.utils import buildPaginator, makeFile
 
 async def itemNameTabComplete(ctx: discord.AutocompleteContext):
     itemsList = await getItemListTabComplete()
+    itemCounts = await getItemCounter()
+    returnInfo = []
     if itemsList:
+        if itemCounts:
+            if ctx.value == "":
+                mostPopular = list(dict(sorted(itemCounts.items(), key=lambda item: item[1])).keys())
+                returnInfo += [x for x in mostPopular]
+                returnInfo += [x for x in itemsList if x not in returnInfo]
+                return returnInfo
         return [item for item in itemsList if ctx.value.lower() in item.lower()]
+    
     return None
 
 async def tagNameTabComplete(ctx: discord.AutocompleteContext):
@@ -51,7 +60,8 @@ class ItemSearch(commands.Cog):
         if not crateList:
             raise NoCratesInDatabaseError
         itemObject = [x for x in itemsList if x.ItemName == item][0]
-        embed = await itemToEmbed(itemObject, crateList)
+        timesRequested = await addOneToItemCounter(item)
+        embed = await itemToEmbed(itemObject, crateList, timesRequested)
         await ctx.respond(embed = embed, file=makeFile(itemObject))
         
     
@@ -73,7 +83,7 @@ class ItemSearch(commands.Cog):
         crateList = await getCrateList()
         if not crateList:
             raise NoCratesInDatabaseError
-        itemsWithTag = [(await itemToEmbed(item, crateList), makeFile(item)) for item in itemsList if tag in [item.TagPrimary, item.TagSecondary, item.TagTertiary]]
+        itemsWithTag = [(await itemToEmbed(item, crateList, await addOneToItemCounter(item.ItemName)), makeFile(item)) for item in itemsList if tag in [item.TagPrimary, item.TagSecondary, item.TagTertiary]]
 
         paginator = buildPaginator(itemsWithTag)
         await paginator.respond(ctx.interaction, ephemeral = False)
@@ -92,7 +102,7 @@ class ItemSearch(commands.Cog):
         crateList = await getCrateList()
         if not crateList:
             raise NoCratesInDatabaseError
-        itemsFound = [(await itemToEmbed(item, crateList), makeFile(item)) for item in itemsList if term.lower() in item.ItemHuman.lower()]
+        itemsFound = [(await itemToEmbed(item, crateList, await addOneToItemCounter(item.ItemName)), makeFile(item)) for item in itemsList if term.lower() in item.ItemHuman.lower()]
         if not itemsFound:
             raise NoResultsFoundError
         
@@ -116,7 +126,7 @@ class ItemSearch(commands.Cog):
         if crate not in [potCrate.CrateName for potCrate in crateList]:
             raise CrateNotInDatabaseError
         crateID = [potCrate.id for potCrate in crateList if potCrate.CrateName == crate][0]
-        itemsFound = [(await itemToEmbed(item, crateList), makeFile(item)) for item in itemsList if item.CrateID == crateID]
+        itemsFound = [(await itemToEmbed(item, crateList, await addOneToItemCounter(item.ItemName)), makeFile(item)) for item in itemsList if item.CrateID == crateID]
         if not itemsFound:
             raise NoResultsFoundError
         paginator = buildPaginator(itemsFound)

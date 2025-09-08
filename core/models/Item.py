@@ -40,7 +40,7 @@ def dictToItem(item: Dict[str, str]):
 
 
 
-async def itemToEmbed(item: Item, crateList: List[Crate]) -> discord.Embed:
+async def itemToEmbed(item: Item, crateList: List[Crate], timesSeen: int | None) -> discord.Embed:
     embed = discord.Embed(title = f"{item.ItemName}",
                       url=f"{itemSoloAddress}/{item.id}",
                       colour=0x00b0f4)
@@ -61,18 +61,12 @@ async def itemToEmbed(item: Item, crateList: List[Crate]) -> discord.Embed:
         embed.add_field(name = "Tertiary Tag",
                         value = f"{item.TagTertiary}",
                         inline = True)
-    #if item.WinPercentage:
-    #    embed.add_field(name = "Win Percentage",
-    #                    value = f"{item.WinPercentage}",
-    #                    inline = True)
-    #if item.RarityHuman:
-    #    embed.add_field(name = "Rarity",
-    #                    value = f"{item.RarityHuman}",
-    #                    inline = True)
     if item.Notes:
         embed.add_field(name = "Notes",
                         value = f"{item.Notes}",
                         inline = False)
 
     embed.set_image(url=f"attachment://{item.id}.png")
+    if timesSeen:
+        embed.set_footer(text=f"Times Searched: {timesSeen}")
     return embed
