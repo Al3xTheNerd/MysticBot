@@ -83,7 +83,7 @@ class ItemSearch(commands.Cog):
         crateList = await getCrateList()
         if not crateList:
             raise NoCratesInDatabaseError
-        itemsWithTag = [(await itemToEmbed(item, crateList, await addOneToItemCounter(item.ItemName)), makeFile(item)) for item in itemsList if tag in [item.TagPrimary, item.TagSecondary, item.TagTertiary]]
+        itemsWithTag = [(await itemToEmbed(item, crateList, await addOneToItemCounter(item.ItemName)), makeFile(item)) for item in itemsList if tag in [item.TagPrimary, item.TagSecondary, item.TagTertiary] and "Repeat Appearance" not in [item.TagPrimary, item.TagSecondary, item.TagTertiary]]
 
         paginator = buildPaginator(itemsWithTag)
         await paginator.respond(ctx.interaction, ephemeral = False)
@@ -102,7 +102,7 @@ class ItemSearch(commands.Cog):
         crateList = await getCrateList()
         if not crateList:
             raise NoCratesInDatabaseError
-        itemsFound = [(await itemToEmbed(item, crateList, await addOneToItemCounter(item.ItemName)), makeFile(item)) for item in itemsList if term.lower() in item.ItemHuman.lower()]
+        itemsFound = [(await itemToEmbed(item, crateList, await addOneToItemCounter(item.ItemName)), makeFile(item)) for item in itemsList if term.lower() in item.ItemHuman.lower() and "Repeat Appearance" not in [item.TagPrimary, item.TagSecondary, item.TagTertiary]]
         if not itemsFound:
             raise NoResultsFoundError
         
