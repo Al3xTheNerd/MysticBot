@@ -4,4 +4,3 @@ __pycache__/
 .VSCodeCounter
 database.db
 discord.log
-core/commandCount.json
