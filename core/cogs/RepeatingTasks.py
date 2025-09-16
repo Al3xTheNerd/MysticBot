@@ -7,7 +7,7 @@ import core.db as db
 from core.env import webAddress
 from core.models.Item import Item, dictToItem
 from core.models.Crate import Crate, dictToCrate
-
+from core.utils import symbolsToRemove
 
 
 
@@ -44,7 +44,7 @@ class RepeatingTasksCog(commands.Cog):
                 itemsList = await db.getItemList()
                 if itemsList:
                     itemToUse = random.choice(itemsList)
-                    for symbol in ["✦", "❂", "■", "☀", "☠", "▲", "❃", "◇", "✿"]:
+                    for symbol in symbolsToRemove:
                         itemToUse.ItemName = itemToUse.ItemName.replace(f"{symbol} ", "").replace(f" {symbol}", "")
                     options = [
                         f"{itemToUse.ItemName} is pretty cool.",

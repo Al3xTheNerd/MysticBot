@@ -5,6 +5,7 @@ from typing import List, Tuple
 from core.db import getCrateList
 from core.models.Item import Item
 
+symbolsToRemove = ["✦", "❂", "■", "☀", "☠", "▲", "❃", "◇", "✿", "♦"]
 
 def makeFile(item: Item):
     return discord.File(f"img/{item.id}.png", filename = f"{item.id}.png", description = f"{item.ItemName}")
