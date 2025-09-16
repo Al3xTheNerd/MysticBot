@@ -24,7 +24,10 @@ class Misc(commands.Cog):
             mostPopular = list(dict(sorted(currentItemCounter.items(), key=lambda item: item[1])).keys())
             mostPopular.reverse()
             for counter, itemName in enumerate(mostPopular, 1):
-                potentialAddition = f"\u001b[0;32m{counter:>3}\u001b[0;0m - \u001b[0;35m{itemName:<40}\u001b[0;0m (\u001b[0;36m{currentItemCounter[itemName]}\u001b[0;0m)\n"
+                prettyName = itemName
+                for symbol in ["✦", "❂", "■", "☀", "☠", "▲", "❃", "◇", "✿"]:
+                    prettyName = prettyName.replace(f"{symbol} ", "").replace(f" {symbol}", "")
+                potentialAddition = f"\u001b[0;32m{counter:>2}\u001b[0;0m - \u001b[0;35m{prettyName:<29}\u001b[0;0m (\u001b[0;36m{currentItemCounter[itemName]}\u001b[0;0m)\n"
                 if len(returnText + potentialAddition) <= 4096:
                     returnText += potentialAddition
                 else: break
