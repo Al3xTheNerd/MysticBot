@@ -3,6 +3,8 @@ from discord.ext import commands
 
 
 from core.cogs.ErrorDefinitions import *
+from core.db import getItemListTabComplete, getItemList, getCrateList, getTagList, addOneToItemCounter, getItemCounter
+
 
 
 
@@ -34,6 +36,15 @@ class Misc(commands.Cog):
         embed.add_field(name="User Count",
                         value=f"{appInfo.approximate_user_install_count}",
                         inline=True)
+        searchCounter = 0
+        currentItemCounter = await getItemCounter()
+        if currentItemCounter:
+            for itemName in currentItemCounter.keys():
+                searchCounter += currentItemCounter[itemName]
+            
+            embed.add_field(name="Search Count",
+                            value=f"{searchCounter}",
+                            inline=True)
         
         
         await ctx.respond(embed = embed)
