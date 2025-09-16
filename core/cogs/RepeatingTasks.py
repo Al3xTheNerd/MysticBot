@@ -58,7 +58,12 @@ class RepeatingTasksCog(commands.Cog):
                     "Am I alive?",
                     "Feelin' Feral!",
                     "Playin' with fire.",
-                    "Not a nerd!"
+                    "Not a nerd!",
+                    "Made by Alex!",
+                    "Take me to the Lake <3",
+                    "Dusting off the bunnies!",
+                    "Yo!",
+                    "Am I lucid rn?"
                 ]
                 status = random.choice(options)
         await self.bot.change_presence(activity = discord.Activity(name = "custom", state = f"{status}", type=discord.ActivityType.custom),
