@@ -15,6 +15,7 @@ async def itemNameTabComplete(ctx: discord.AutocompleteContext):
         if itemCounts:
             if ctx.value == "":
                 mostPopular = list(dict(sorted(itemCounts.items(), key=lambda item: item[1])).keys())
+                mostPopular.reverse()
                 returnInfo += [x for x in mostPopular]
                 returnInfo += [x for x in itemsList if x not in returnInfo]
                 return returnInfo
