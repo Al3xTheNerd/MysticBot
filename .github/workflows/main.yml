@@ -1,4 +1,4 @@
-name: Sync with Panel
+name: Reload Item Bots
 
 on:
   push:
@@ -9,8 +9,15 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: hwalker928/ptero-gitsync@v1.0
+      - name: Reload Mystic Bot
+        uses: hwalker928/ptero-gitsync@v1.0
         with:
           panel-url: ${{ secrets.PANEL_URL }}
           api-key: ${{ secrets.API_KEY }}
           server-id: ${{ secrets.SERVER_ID }}
+      - name: Reload Blossom Bot
+        uses: hwalker928/ptero-gitsync@v1.0
+        with:
+          panel-url: ${{ secrets.PANEL_URL }}
+          api-key: ${{ secrets.API_KEY }}
+          server-id: ${{ secrets.SERVER_ID_2 }}
