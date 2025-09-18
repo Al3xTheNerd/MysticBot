@@ -4,11 +4,12 @@ from typing import List, Tuple
 
 from core.db import getCrateList
 from core.models.Item import Item
+from env import server_name
 
 symbolsToRemove = ["✦", "❂", "■", "☀", "☠", "▲", "❃", "◇", "✿", "♦"]
 
 def makeFile(item: Item):
-    return discord.File(f"img/{item.id}.png", filename = f"{item.id}.png", description = f"{item.ItemName}")
+    return discord.File(f"img/{server_name}/{item.id}.png", filename = f"{item.id}.png", description = f"{item.ItemName}")
 
 
 def buildPaginator(pageList: List[Tuple[discord.Embed, discord.File]]):
