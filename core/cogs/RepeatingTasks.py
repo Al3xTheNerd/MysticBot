@@ -78,7 +78,7 @@ class RepeatingTasksCog(commands.Cog):
                                        status = discord.Status.online)
         async with aiohttp.ClientSession() as session:
             # Get Item List
-            infoPieces = ["id", "CrateID", "TagPrimary", "TagSecondary", "TagTertiary", "WinPercentage", "RarityHuman", "ItemName", "Notes", "ItemHuman"]
+            infoPieces = ["id", "CrateID", "TagPrimary", "TagSecondary", "TagTertiary", "TagQuaternary", "TagQuinary", "WinPercentage", "RarityHuman", "ItemName", "Notes", "ItemHuman"]
             headers = { "I-INCLUDED-INFO" : ";".join(infoPieces)}
             async with session.get(f"{webAddress}/items", headers = headers) as response:
                 itemRes = await response.json()

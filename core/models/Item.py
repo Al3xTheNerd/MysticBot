@@ -18,6 +18,8 @@ class Item:
     TagPrimary: str
     TagSecondary: str
     TagTertiary: str
+    TagQuaternary: str
+    TagQuinary: str
     WinPercentage: str
     RarityHuman: str
     ItemName: str    
@@ -31,13 +33,14 @@ def dictToItem(item: Dict[str, str]):
             item["TagPrimary"],
             item["TagSecondary"],
             item["TagTertiary"],
+            item["TagQuaternary"],
+            item["TagQuinary"],
             item["WinPercentage"],
             item["RarityHuman"],
             item["ItemName"],
             item["Notes"],
             item["ItemHuman"]
-            )
-
+            ) # type: ignore
 
 
 async def itemToEmbed(item: Item, crateList: List[Crate], timesSeen: int | None) -> discord.Embed:
@@ -60,6 +63,14 @@ async def itemToEmbed(item: Item, crateList: List[Crate], timesSeen: int | None)
     if item.TagTertiary:
         embed.add_field(name = "Tertiary Tag",
                         value = f"{item.TagTertiary}",
+                        inline = True)
+    if item.TagQuaternary:
+        embed.add_field(name = "Quaternary Tag",
+                        value = f"{item.TagQuaternary}",
+                        inline = True)
+    if item.TagQuinary:
+        embed.add_field(name = "Quinary Tag",
+                        value = f"{item.TagQuinary}",
                         inline = True)
     if item.Notes:
         embed.add_field(name = "Notes",
