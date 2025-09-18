@@ -53,17 +53,11 @@ class RepeatingTasksCog(commands.Cog):
                     status = random.choice(options)
             case 4:
                 options = [
-                    "Beaver Fever!",
-                    "Salt you later!",
                     "Am I alive?",
-                    "Feelin' Feral!",
                     "Playin' with fire.",
                     "Not a nerd!",
                     "Made by Alex!",
-                    "Take me to the Lake <3",
-                    "Dusting off the bunnies!",
-                    "Yo!",
-                    "Am I lucid rn?"
+                    "Yo!"
                 ]
                 status = random.choice(options)
         await self.bot.change_presence(activity = discord.Activity(name = "custom", state = f"{status}", type=discord.ActivityType.custom),
