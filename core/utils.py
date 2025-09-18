@@ -6,7 +6,28 @@ from core.db import getCrateList
 from core.models.Item import Item
 from core.env import server_name
 
-symbolsToRemove = ["✦", "❂", "■", "☀", "☠", "▲", "❃", "◇", "✿", "♦"]
+symbolsToRemove = [
+    "✦", 
+    "❂", 
+    "■", 
+    "☀", 
+    "☠", 
+    "▲", 
+    "❃", 
+    "◇", 
+    "✿", 
+    "♦",
+    "❀",
+    "♆",
+    "๑",
+    "⊱",
+    "⊰",
+    "⋗",
+    "⋖",
+    "❤",
+    "❉",
+    "✲"
+    ]
 
 def makeFile(item: Item):
     return discord.File(f"img/{server_name}/{item.id}.png", filename = f"{item.id}.png", description = f"{item.ItemName}")
