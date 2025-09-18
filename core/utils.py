@@ -4,7 +4,7 @@ from typing import List, Tuple
 
 from core.db import getCrateList
 from core.models.Item import Item
-from env import server_name
+from core.env import server_name
 
 symbolsToRemove = ["✦", "❂", "■", "☀", "☠", "▲", "❃", "◇", "✿", "♦"]
 

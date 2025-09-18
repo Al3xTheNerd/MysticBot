@@ -55,6 +55,7 @@ class ItemSearch(commands.Cog):
         if not itemsList:
             raise NoItemsInDatabaseError
         itemNameList = [x.ItemName for x in itemsList]
+        print(len(itemNameList))
         if item not in itemNameList:
             raise ItemNotInDatabaseError
         crateList = await getCrateList()
