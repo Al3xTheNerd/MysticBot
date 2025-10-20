@@ -134,7 +134,50 @@ class ItemSearch(commands.Cog):
         paginator = buildPaginator(itemsFound)
         await paginator.respond(ctx.interaction, ephemeral = False)
     
-    
+    @search.command(
+        name = "advanced",
+        description = "Search by multiple constraints."
+    )
+    @option("crate", description = "Pick a crate!", autocomplete = crateNameTabComplete, required=False, default="")
+    @option("term", description = "Enter a phrase!", required=False, default="", input_type=str)
+    @option("tag", description = "Pick a tag!", autocomplete = tagNameTabComplete, required=False, default="", input_type=str)
+    async def advancedSearchCommand(self,
+                                 ctx: discord.ApplicationContext,
+                                 crate: str,
+                                 term: str,
+                                 tag: str):
+        itemsList = await getItemList()
+        if not itemsList:
+            raise NoItemsInDatabaseError
+        crateList = await getCrateList()
+        if not crateList:
+            raise NoCratesInDatabaseError
+        if crate == "" and term == "" and tag == "":
+            raise MinimumConstraintError
+        
+        if crate != "":
+            if crate not in [potCrate.CrateName for potCrate in crateList]:
+                raise CrateNotInDatabaseError
+            crateID = [potCrate.id for potCrate in crateList if potCrate.CrateName == crate][0]
+            itemsList = [item for item in itemsList if item.CrateID == crateID]
+        
+        if tag != "":
+            tagsList = await getTagList()
+            if not tagsList:
+                raise NoTagsInDatabaseError
+            if tag not in tagsList:
+                raise TagNotInDatabaseError
+            itemsList = [item for item in itemsList if tag in [item.TagPrimary, item.TagSecondary, item.TagTertiary, item.TagQuaternary, item.TagQuinary]]
+        
+        if term != "":
+            itemsList = [item for item in itemsList if term.lower() in item.ItemHuman.lower()]
+        
+        
+        itemsFound = [(await itemToEmbed(item, crateList, await addOneToItemCounter(item.ItemName)), makeFile(item)) for item in itemsList if "Repeat Appearance" not in [item.TagPrimary, item.TagSecondary, item.TagTertiary, item.TagQuaternary, item.TagQuinary]]
+        if not itemsFound:
+            raise NoResultsFoundError
+        paginator = buildPaginator(itemsFound)
+        await paginator.respond(ctx.interaction, ephemeral = False)
     
 def setup(bot: discord.Bot):
     bot.add_cog(ItemSearch(bot))
