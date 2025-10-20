@@ -48,7 +48,7 @@ class Misc(commands.Cog):
         appInfo = await self.bot.application_info()
         embed = discord.Embed(colour=0x3c7186)
 
-        embed.add_field(name="Bot Owner",
+        embed.add_field(name="Bot Manager",
                         value=f"{appInfo.owner.mention}",
                         inline=False)
         embed.add_field(name="Latency",
