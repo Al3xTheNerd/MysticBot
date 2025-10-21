@@ -159,24 +159,37 @@ class ItemSearch(commands.Cog):
             if crate not in [potCrate.CrateName for potCrate in crateList]:
                 raise CrateNotInDatabaseError
             crateID = [potCrate.id for potCrate in crateList if potCrate.CrateName == crate][0]
-            itemsList = [item for item in itemsList if item.CrateID == crateID]
-        
+
         if tag != "":
             tagsList = await getTagList()
             if not tagsList:
                 raise NoTagsInDatabaseError
             if tag not in tagsList:
                 raise TagNotInDatabaseError
-            itemsList = [item for item in itemsList if tag in [item.TagPrimary, item.TagSecondary, item.TagTertiary, item.TagQuaternary, item.TagQuinary]]
+
         
-        if term != "":
-            itemsList = [item for item in itemsList if term.lower() in item.ItemHuman.lower()]
+        sortedItems = []
+        for item in itemsList:
+            meetsAllConditions = False
+            itemTags = [item.TagPrimary, item.TagSecondary, item.TagTertiary, item.TagQuaternary, item.TagQuinary]
+            if "Repeat Appearance" in itemTags:
+                continue
+            if crate != "":
+                if item.CrateID != crateID:
+                    continue
+            if tag != "":
+                if tag not in itemTags:
+                    continue
+            if term != "":
+                if term.lower() not in item.ItemHuman.lower():
+                    continue
+            embedPage = await itemToEmbed(item, crateList, await addOneToItemCounter(item.ItemName)), makeFile(item)
+            sortedItems.append(embedPage)
         
         
-        itemsFound = [(await itemToEmbed(item, crateList, await addOneToItemCounter(item.ItemName)), makeFile(item)) for item in itemsList if "Repeat Appearance" not in [item.TagPrimary, item.TagSecondary, item.TagTertiary, item.TagQuaternary, item.TagQuinary]]
-        if not itemsFound:
+        if not sortedItems:
             raise NoResultsFoundError
-        paginator = buildPaginator(itemsFound)
+        paginator = buildPaginator(sortedItems)
         await paginator.respond(ctx.interaction, ephemeral = False)
     
 def setup(bot: discord.Bot):
