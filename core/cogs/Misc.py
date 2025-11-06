@@ -27,7 +27,7 @@ class Misc(commands.Cog):
                 prettyName = itemName
                 for symbol in symbolsToRemove:
                     prettyName = prettyName.replace(f"{symbol} ", "").replace(f" {symbol}", "")
-                potentialAddition = f"\u001b[0;32m{counter:>2}\u001b[0;0m - \u001b[0;35m{prettyName:<29}\u001b[0;0m (\u001b[0;36m{currentItemCounter[itemName]}\u001b[0;0m)\n"
+                potentialAddition = f"\u001b[0;32m{counter:>2}\u001b[0;0m - \u001b[0;35m{prettyName:<31}\u001b[0;0m (\u001b[0;36m{currentItemCounter[itemName]}\u001b[0;0m)\n"
                 if len(returnText + potentialAddition) <= 4096:
                     returnText += potentialAddition
                 else: break

@@ -175,7 +175,7 @@ class ItemSearch(commands.Cog):
             if "Repeat Appearance" in itemTags:
                 continue
             if crate != "":
-                if item.CrateID != crateID:
+                if item.CrateID != crateID: # type: ignore
                     continue
             if tag != "":
                 if tag not in itemTags:
