@@ -5,6 +5,7 @@ from typing import List, Tuple
 from core.db import getCrateList
 from core.models.Item import Item
 from core.env import server_name
+import os
 
 symbolsToRemove = [
     "✦", 
@@ -32,8 +33,13 @@ symbolsToRemove = [
 def makeFile(item: Item):
     return discord.File(f"img/{server_name}/{item.id}.png", filename = f"{item.id}.png", description = f"{item.ItemName}")
 
+def makeIcon(item: Item):
+    path = f"img/{server_name}_Icons/{item.id}.png"
+    if os.path.isfile(path):
+        return discord.File(path, filename = f"{item.id}_icon.png", description = f"{item.ItemName} Icon")
+    else: return None
 
-def buildPaginator(pageList: List[Tuple[discord.Embed, discord.File]]):
+def buildPaginator(pageList: List[Tuple[discord.Embed, discord.File, discord.File | None]]):
     pagelist = [
         pages.PaginatorButton("first", label="⏪", style=discord.ButtonStyle.green),
         pages.PaginatorButton("prev", label="⬅️", style=discord.ButtonStyle.green),
@@ -42,8 +48,11 @@ def buildPaginator(pageList: List[Tuple[discord.Embed, discord.File]]):
         pages.PaginatorButton("last", label="⏩", style=discord.ButtonStyle.green)
     ]
     prettyPages = []
-    for embed, file in pageList:
-        prettyPages.append(pages.Page(embeds=[embed], files = [file]))
+    for embed, file, maybeIcon in pageList:
+        if maybeIcon:
+            prettyPages.append(pages.Page(embeds=[embed], files = [file, maybeIcon]))
+        else:
+            prettyPages.append(pages.Page(embeds=[embed], files = [file]))
     inator = pages.Paginator(
                 pages = prettyPages, # type: ignore
                 show_disabled = True,

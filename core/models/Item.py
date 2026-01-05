@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Dict, List
 import discord
+import os
 
 
 
@@ -78,6 +79,7 @@ async def itemToEmbed(item: Item, crateList: List[Crate], timesSeen: int | None)
                         inline = False)
 
     embed.set_image(url=f"attachment://{item.id}.png")
+    embed.set_thumbnail(url=f"attachment://{item.id}_icon.png")
     if timesSeen:
         embed.set_footer(text=f"Times Searched: {timesSeen}")
     return embed
