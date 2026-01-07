@@ -21,6 +21,8 @@ class Item:
     TagTertiary: str
     TagQuaternary: str
     TagQuinary: str
+    TagSenary: str
+    TagSeptenary: str
     WinPercentage: str
     RarityHuman: str
     ItemName: str    
@@ -36,6 +38,8 @@ def dictToItem(item: Dict[str, str]):
             item["TagTertiary"],
             item["TagQuaternary"],
             item["TagQuinary"],
+            item["TagSenary"],
+            item["TagSeptenary"],
             item["WinPercentage"],
             item["RarityHuman"],
             item["ItemName"],
@@ -72,6 +76,14 @@ async def itemToEmbed(item: Item, crateList: List[Crate], timesSeen: int | None)
     if item.TagQuinary:
         embed.add_field(name = "Quinary Tag",
                         value = f"{item.TagQuinary}",
+                        inline = True)
+    if item.TagSenary:
+        embed.add_field(name = "Senary Tag",
+                        value = f"{item.TagSenary}",
+                        inline = True)
+    if item.TagSeptenary:
+        embed.add_field(name = "Septenary Tag",
+                        value = f"{item.TagSeptenary}",
                         inline = True)
     if item.Notes:
         embed.add_field(name = "Notes",

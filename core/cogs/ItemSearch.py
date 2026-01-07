@@ -88,7 +88,7 @@ class ItemSearch(commands.Cog):
         crateList = await getCrateList()
         if not crateList:
             raise NoCratesInDatabaseError
-        itemsWithTag = [(await itemToEmbed(item, crateList, await addOneToItemCounter(item.ItemName)), makeFile(item), makeIcon(item)) for item in itemsList if tag in [item.TagPrimary, item.TagSecondary, item.TagTertiary, item.TagQuaternary, item.TagQuinary] and "Repeat Appearance" not in [item.TagPrimary, item.TagSecondary, item.TagTertiary, item.TagQuaternary, item.TagQuinary]]
+        itemsWithTag = [(await itemToEmbed(item, crateList, await addOneToItemCounter(item.ItemName)), makeFile(item), makeIcon(item)) for item in itemsList if tag in [item.TagPrimary, item.TagSecondary, item.TagTertiary, item.TagQuaternary, item.TagQuinary, item.TagSenary, item.TagSeptenary] and "Repeat Appearance" not in [item.TagPrimary, item.TagSecondary, item.TagTertiary, item.TagQuaternary, item.TagQuinary, item.TagSenary, item.TagSeptenary]]
 
         paginator = buildPaginator(itemsWithTag)
         await paginator.respond(ctx.interaction, ephemeral = False)
@@ -107,7 +107,7 @@ class ItemSearch(commands.Cog):
         crateList = await getCrateList()
         if not crateList:
             raise NoCratesInDatabaseError
-        itemsFound = [(await itemToEmbed(item, crateList, await addOneToItemCounter(item.ItemName)), makeFile(item), makeIcon(item)) for item in itemsList if term.lower() in item.ItemHuman.lower() and "Repeat Appearance" not in [item.TagPrimary, item.TagSecondary, item.TagTertiary, item.TagQuaternary, item.TagQuinary]]
+        itemsFound = [(await itemToEmbed(item, crateList, await addOneToItemCounter(item.ItemName)), makeFile(item), makeIcon(item)) for item in itemsList if term.lower() in item.ItemHuman.lower() and "Repeat Appearance" not in [item.TagPrimary, item.TagSecondary, item.TagTertiary, item.TagQuaternary, item.TagQuinary, item.TagSenary, item.TagSeptenary]]
         if not itemsFound:
             raise NoResultsFoundError
         
@@ -174,7 +174,7 @@ class ItemSearch(commands.Cog):
         sortedItems = []
         for item in itemsList:
             meetsAllConditions = False
-            itemTags = [item.TagPrimary, item.TagSecondary, item.TagTertiary, item.TagQuaternary, item.TagQuinary]
+            itemTags = [item.TagPrimary, item.TagSecondary, item.TagTertiary, item.TagQuaternary, item.TagQuinary, item.TagSenary, item.TagSeptenary]
             if "Repeat Appearance" in itemTags:
                 continue
             if crate != "":
