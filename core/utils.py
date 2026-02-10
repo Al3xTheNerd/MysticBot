@@ -27,7 +27,8 @@ symbolsToRemove = [
     "⋖",
     "❤",
     "❉",
-    "✲"
+    "✲",
+    "◈"
     ]
 
 def makeFile(item: Item):
