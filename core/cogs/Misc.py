@@ -4,7 +4,7 @@ from discord.ext import commands
 
 from core.cogs.ErrorDefinitions import *
 from core.db import getItemListTabComplete, getItemList, getCrateList, getTagList, addOneToItemCounter, getItemCounter
-from core.utils import symbolsToRemove
+from core.utils import symbolsToRemove, updateFromSite
 
 
 
@@ -73,7 +73,43 @@ class Misc(commands.Cog):
         
         await ctx.respond(embed = embed)
 
-    
+    @commands.slash_command(
+        name = "refresh",
+        description = "Bot manager can refresh item data with this command.")
+    async def refreshData(self,
+                          ctx: discord.ApplicationContext):
+        appInfo = await self.bot.application_info()
+        if ctx.author.id == appInfo.owner.id:
+            await updateFromSite()
+            print(f"{appInfo.owner.name} refreshed item data.")
+            itemList = await getItemList()
+            crateList = await getCrateList()
+            tagList = await getTagList()
+            embed = discord.Embed(title="Data Refreshed", colour=0x3c7186)
+            if itemList:
+                embed.add_field(name="Item Count:",
+                                value=f"{len(itemList)}",
+                                inline=False)
+            if crateList:
+                embed.add_field(name="Crate Count:",
+                                value=f"{len(crateList)}",
+                                inline=False)
+            if tagList:
+                embed.add_field(name="Tag Count:",
+                                value=f"{len(tagList)}",
+                                inline=False)
+            embed.set_footer(text=f"{appInfo.owner.name}",
+                            icon_url=f"{appInfo.owner.display_avatar.url}")
+            
+        else:
+            embed = discord.Embed(title="Unauthorized user.", colour=0x3c7186)
+            embed.add_field(name="Reason:",
+                            value=f"You are not {appInfo.owner.mention}, thus you cannot use this command.",
+                            inline=False)
+            embed.set_footer(text=f"{appInfo.owner.name}",
+                            icon_url=f"{appInfo.owner.display_avatar.url}")
+        
+        await ctx.respond(embed = embed)
     
     
 def setup(bot: discord.Bot):

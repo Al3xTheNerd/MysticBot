@@ -7,7 +7,7 @@ import core.db as db
 from core.env import webAddress
 from core.models.Item import Item, dictToItem
 from core.models.Crate import Crate, dictToCrate
-from core.utils import symbolsToRemove
+from core.utils import symbolsToRemove, updateFromSite
 
 
 
@@ -68,32 +68,7 @@ class RepeatingTasksCog(commands.Cog):
     async def pullData(self):
         if self.updateStatus.is_running():
             self.updateStatus.stop()
-        await self.bot.change_presence(activity = discord.Activity(name = "custom", state = "Updating Item List!", type=discord.ActivityType.custom),
-                                       status = discord.Status.online)
-        async with aiohttp.ClientSession() as session:
-            # Get Item List
-            infoPieces = ["id", "CrateID", "TagPrimary", "TagSecondary", "TagTertiary", "TagQuaternary", "TagQuinary", "TagSenary", "TagSeptenary", "WinPercentage", "RarityHuman", "ItemName", "Notes", "ItemHuman"]
-            headers = { "I-INCLUDED-INFO" : ";".join(infoPieces)}
-            async with session.get(f"{webAddress}/items", headers = headers) as response:
-                itemRes = await response.json()
-            items: List[Item] = []
-            if itemRes["data"]:
-                items = [dictToItem(x) for x in itemRes["data"]]
-            await db.updateItemList(items)
-            # Get Crate List
-            async with session.get(f"{webAddress}/crates") as response:
-                crateRes = await response.json()
-            crates: List[Crate] = []
-            if crateRes:
-                crates = [dictToCrate(x) for x in crateRes]
-            await db.updateCrateList(crates)
-            # Get Tag List
-            async with session.get(f"{webAddress}/tags") as response:
-                tagRes = await response.json()
-            tags = []
-            if tagRes:
-                tags = tagRes
-            await db.updateTagList(tagRes)
+        await updateFromSite()
 
         await self.updateStatus.start()
 def setup(bot: discord.Bot):
