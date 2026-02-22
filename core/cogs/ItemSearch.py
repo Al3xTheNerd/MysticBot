@@ -3,9 +3,11 @@ from discord.ext import commands
 from discord.commands import option, SlashCommandGroup
 
 from core.db import getItemListTabComplete, getItemList, getCrateList, getTagList, addOneToItemCounter, getItemCounter
-from core.models.Item import itemToEmbed
+from core.models.Item import itemToEmbed, Item
 from core.cogs.ErrorDefinitions import *
-from core.utils import buildPaginator, makeFile, makeIcon
+from core.utils import buildPaginator, makeFile, makeIcon, combineImages
+
+from typing import List
 
 async def itemNameTabComplete(ctx: discord.AutocompleteContext):
     itemsList = await getItemListTabComplete()
@@ -68,6 +70,55 @@ class ItemSearch(commands.Cog):
             await ctx.respond(embed = embed, files=[makeFile(itemObject), makeIcon(itemObject)])
         else:
             await ctx.respond(embed = embed, files=[makeFile(itemObject)])
+
+    @search.command(
+        name = "compare",
+        description = "Compare two or more items!")
+    @option("item", description="Pick an item!", autocomplete = itemNameTabComplete, required=True)
+    @option("item_two", description = "Pick another item!", autocomplete = itemNameTabComplete, required=True, default="")
+    @option("item_three", description = "Pick another item!", autocomplete = itemNameTabComplete, required=False, default="")
+    @option("item_four", description = "Pick another item!", autocomplete = itemNameTabComplete, required=False, default="")
+    @option("item_five", description = "Pick another item!", autocomplete = itemNameTabComplete, required=False, default="")
+    @option("item_six", description = "Pick another item!", autocomplete = itemNameTabComplete, required=False, default="")
+    @option("item_seven", description = "Pick another item!", autocomplete = itemNameTabComplete, required=False, default="")
+    @option("item_eight", description = "Pick another item!", autocomplete = itemNameTabComplete, required=False, default="")
+    @option("item_nine", description = "Pick another item!", autocomplete = itemNameTabComplete, required=False, default="")
+    @option("item_ten", description = "Pick another item!", autocomplete = itemNameTabComplete, required=False, default="")
+    
+    async def itemCombineCommand(self,
+                          ctx: discord.ApplicationContext,
+                          item: str,
+                          item_two: str,
+                          item_three: str,
+                          item_four: str,
+                          item_five: str,
+                          item_six: str,
+                          item_seven: str,
+                          item_eight: str,
+                          item_nine: str,
+                          item_ten: str):
+        comparisonItems = [x for x in [item, item_two, item_three, item_four, item_five, item_six, item_seven, item_eight, item_nine, item_ten] if x != ""]
+        itemsList = await getItemList()
+        if not itemsList:
+            raise NoItemsInDatabaseError
+        itemNameList = [x.ItemName for x in itemsList]
+        if item not in itemNameList:
+            raise ItemNotInDatabaseError
+        crateList = await getCrateList()
+        if not crateList:
+            raise NoCratesInDatabaseError
+        
+        comparisonObjects: List[Item] = []
+        for itemName in comparisonItems:
+            comparisonObjects.append([x for x in itemsList if x.ItemName == itemName][0])
+            
+        
+        
+        combinationImage = combineImages(comparisonObjects)
+        responseMessage = "Here is your comparison of the following items:"
+        for item in comparisonObjects:
+            responseMessage += f"\n- {item.ItemName}"
+        await ctx.respond(responseMessage, file=combinationImage)
         
     
     @search.command(

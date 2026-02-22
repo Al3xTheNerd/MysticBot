@@ -6,6 +6,8 @@ from core.models.Item import Item, dictToItem
 from core.models.Crate import Crate, dictToCrate
 from core.models.Item import Item
 from core.env import server_name, webAddress
+from PIL import Image
+import io
 
 import os, aiohttp
 from typing import List, Tuple
@@ -37,6 +39,25 @@ symbolsToRemove = [
 
 def makeFile(item: Item):
     return discord.File(f"img/{server_name}/{item.id}.png", filename = f"{item.id}.png", description = f"{item.ItemName}")
+
+def combineImages(items: List[Item]):
+    images = [Image.open(f"img/{server_name}/{item.id}.png") for item in items]
+    widths, heights = zip(*(i.size for i in images))
+    
+    total_width = sum(widths)
+    max_height = max(heights)
+    
+    new_image = Image.new('RGB', (total_width, max_height))
+    
+    x_offset = 0
+    for im in images:
+        new_image.paste(im, (x_offset, 0))
+        x_offset += im.size[0]
+        
+    with io.BytesIO() as image_binary:
+        new_image.save(image_binary, 'PNG')
+        image_binary.seek(0)
+        return discord.File(image_binary, filename=f"{"_".join([str(item.id) for item in items])}.png", description=f"Comparision of the following items: {", ".join([item.ItemName for item in items])}")
 
 def makeIcon(item: Item):
     path = f"img/{server_name}_Icons/{item.id}.png"
