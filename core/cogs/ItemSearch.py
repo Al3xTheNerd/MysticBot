@@ -5,7 +5,7 @@ from discord.commands import option, SlashCommandGroup
 from core.db import getItemListTabComplete, getItemList, getCrateList, getTagList, addOneToItemCounter, getItemCounter
 from core.models.Item import itemToEmbed, Item
 from core.cogs.ErrorDefinitions import *
-from core.utils import buildPaginator, makeFile, makeIcon, combineImages
+from core.utils import buildPaginator, makeFile, makeIcon, combineImages, convert_roman_in_string, convert_int_to_roman
 
 from typing import List
 
@@ -158,7 +158,12 @@ class ItemSearch(commands.Cog):
         crateList = await getCrateList()
         if not crateList:
             raise NoCratesInDatabaseError
-        itemsFound = [(await itemToEmbed(item, crateList, await addOneToItemCounter(item.ItemName)), makeFile(item), makeIcon(item)) for item in itemsList if term.lower() in item.ItemHuman.lower() and "Repeat Appearance" not in [item.TagPrimary, item.TagSecondary, item.TagTertiary, item.TagQuaternary, item.TagQuinary, item.TagSenary, item.TagSeptenary]]
+        itemsFound = []
+        for item in itemsList:
+            loweredItemHuman = item.ItemHuman.lower()
+            if term.lower() in loweredItemHuman or convert_roman_in_string(term).lower() in loweredItemHuman or convert_int_to_roman(term).lower() in loweredItemHuman:
+                if "Repeat Appearance" not in [item.TagPrimary, item.TagSecondary, item.TagTertiary, item.TagQuaternary, item.TagQuinary, item.TagSenary, item.TagSeptenary]:
+                    itemsFound.append((await itemToEmbed(item, crateList, await addOneToItemCounter(item.ItemName)), makeFile(item), makeIcon(item)))
         if not itemsFound:
             raise NoResultsFoundError
         
@@ -235,7 +240,8 @@ class ItemSearch(commands.Cog):
                 if tag not in itemTags:
                     continue
             if term != "":
-                if term.lower() not in item.ItemHuman.lower():
+                loweredItemHuman = item.ItemHuman.lower()
+                if term.lower() not in loweredItemHuman and convert_roman_in_string(term).lower() not in loweredItemHuman and convert_int_to_roman(term).lower() not in loweredItemHuman:
                     continue
             embedPage = await itemToEmbed(item, crateList, await addOneToItemCounter(item.ItemName)), makeFile(item), makeIcon(item)
             sortedItems.append(embedPage)
