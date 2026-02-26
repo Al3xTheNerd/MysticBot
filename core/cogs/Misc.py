@@ -4,7 +4,7 @@ from discord.ext import commands
 
 from core.cogs.ErrorDefinitions import *
 from core.db import getItemListTabComplete, getItemList, getCrateList, getTagList, addOneToItemCounter, getItemCounter
-from core.utils import symbolsToRemove, updateFromSite
+from core.utils import symbolsToRemove, updateFromSite, buildPopularityPaginator
 
 
 
@@ -19,6 +19,8 @@ class Misc(commands.Cog):
     async def topItems(self,
                        ctx: discord.ApplicationContext):   
         currentItemCounter = await getItemCounter()
+        pageList = []
+        
         returnText = "```ansi\n"
         if currentItemCounter:
             mostPopular = list(dict(sorted(currentItemCounter.items(), key=lambda item: item[1])).keys())
@@ -30,15 +32,23 @@ class Misc(commands.Cog):
                 potentialAddition = f"\u001b[0;32m{counter:>2}\u001b[0;0m - \u001b[0;35m{prettyName:<36}\u001b[0;0m (\u001b[0;36m{currentItemCounter[itemName]}\u001b[0;0m)\n"
                 if len(returnText + potentialAddition) <= 4096:
                     returnText += potentialAddition
-                else: break
-            returnText += "```"
+                else: 
+                    returnText += "```"
+                    pageList.append(returnText)
+                    returnText = f"```ansi\n{potentialAddition}"
+            if not returnText.endswith("```"):
+                returnText += "```"
+                pageList.append(returnText)
         else:
             returnText += "No items searched yet!```"
-        
-        embed = discord.Embed(color=0x3c7186)
-        embed.title = "Most popular searches!"
-        embed.description = returnText
-        await ctx.respond(embed = embed)
+        embeds = []
+        for page in pageList:
+            embed = discord.Embed(color=0x3c7186)
+            embed.title = "Most popular searches!"
+            embed.description = page
+            embeds.append(embed)
+        paginator = buildPopularityPaginator(embeds)
+        await paginator.respond(ctx.interaction, ephemeral = False)
         
     @commands.slash_command(
         name = "stats",
