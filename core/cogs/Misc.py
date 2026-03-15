@@ -5,8 +5,8 @@ from discord.ext import commands
 from core.cogs.ErrorDefinitions import *
 from core.db import getItemListTabComplete, getItemList, getCrateList, getTagList, addOneToItemCounter, getItemCounter
 from core.utils import symbolsToRemove, updateFromSite, buildPopularityPaginator
-
-
+from core.models.Item import Item
+from typing import List
 
 
 class Misc(commands.Cog):
@@ -90,12 +90,19 @@ class Misc(commands.Cog):
                           ctx: discord.ApplicationContext):
         appInfo = await self.bot.application_info()
         if ctx.author.id == appInfo.owner.id:
-            await updateFromSite()
+            missingPics: List[Item] = await updateFromSite()
             print(f"{appInfo.owner.name} refreshed item data.")
             itemList = await getItemList()
             crateList = await getCrateList()
             tagList = await getTagList()
+                
             embed = discord.Embed(title="Data Refreshed", colour=0x3c7186)
+            if missingPics:
+                ret = "The following items have not had images generated yet, and will thus be excluded.```"
+                for item in missingPics:
+                    ret += f"\n{item.id} - {item.ItemName}"
+                ret += "```"
+                embed.description = ret
             if itemList:
                 embed.add_field(name="Item Count:",
                                 value=f"{len(itemList)}",

@@ -5,7 +5,7 @@ from discord.commands import option, SlashCommandGroup
 from core.db import getItemListTabComplete, getItemList, getCrateList, getTagList, addOneToItemCounter, getItemCounter
 from core.models.Item import itemToEmbed, Item
 from core.cogs.ErrorDefinitions import *
-from core.utils import buildPaginator, makeFile, combineImages, convert_roman_in_string, convert_int_to_roman
+from core.utils import buildPaginator, combineImages, convert_roman_in_string, convert_int_to_roman
 
 from typing import List
 
@@ -65,7 +65,7 @@ class ItemSearch(commands.Cog):
         itemObject = [x for x in itemsList if x.ItemName == item][0]
         timesRequested = await addOneToItemCounter(item)
         embed = await itemToEmbed(itemObject, crateList, timesRequested)
-        await ctx.respond(embed = embed, files=[makeFile(itemObject)])
+        await ctx.respond(embed = embed)
 
     @search.command(
         name = "compare",
@@ -135,7 +135,7 @@ class ItemSearch(commands.Cog):
         crateList = await getCrateList()
         if not crateList:
             raise NoCratesInDatabaseError
-        itemsWithTag = [(await itemToEmbed(item, crateList, await addOneToItemCounter(item.ItemName)), makeFile(item)) for item in itemsList if tag in [item.TagPrimary, item.TagSecondary, item.TagTertiary, item.TagQuaternary, item.TagQuinary, item.TagSenary, item.TagSeptenary] and "Repeat Appearance" not in [item.TagPrimary, item.TagSecondary, item.TagTertiary, item.TagQuaternary, item.TagQuinary, item.TagSenary, item.TagSeptenary]]
+        itemsWithTag = [(await itemToEmbed(item, crateList, await addOneToItemCounter(item.ItemName))) for item in itemsList if tag in [item.TagPrimary, item.TagSecondary, item.TagTertiary, item.TagQuaternary, item.TagQuinary, item.TagSenary, item.TagSeptenary] and "Repeat Appearance" not in [item.TagPrimary, item.TagSecondary, item.TagTertiary, item.TagQuaternary, item.TagQuinary, item.TagSenary, item.TagSeptenary]]
 
         paginator = buildPaginator(itemsWithTag)
         await paginator.respond(ctx.interaction, ephemeral = False)
@@ -159,7 +159,7 @@ class ItemSearch(commands.Cog):
             loweredItemHuman = item.ItemHuman.lower()
             if term.lower() in loweredItemHuman or convert_roman_in_string(term).lower() in loweredItemHuman or convert_int_to_roman(term).lower() in loweredItemHuman:
                 if "Repeat Appearance" not in [item.TagPrimary, item.TagSecondary, item.TagTertiary, item.TagQuaternary, item.TagQuinary, item.TagSenary, item.TagSeptenary]:
-                    itemsFound.append((await itemToEmbed(item, crateList, await addOneToItemCounter(item.ItemName)), makeFile(item)))
+                    itemsFound.append((await itemToEmbed(item, crateList, await addOneToItemCounter(item.ItemName))))
         if not itemsFound:
             raise NoResultsFoundError
         
@@ -183,7 +183,7 @@ class ItemSearch(commands.Cog):
         if crate not in [potCrate.CrateName for potCrate in crateList]:
             raise CrateNotInDatabaseError
         crateID = [potCrate.id for potCrate in crateList if potCrate.CrateName == crate][0]
-        itemsFound = [(await itemToEmbed(item, crateList, await addOneToItemCounter(item.ItemName)), makeFile(item)) for item in itemsList if item.CrateID == crateID]
+        itemsFound = [(await itemToEmbed(item, crateList, await addOneToItemCounter(item.ItemName))) for item in itemsList if item.CrateID == crateID]
         if not itemsFound:
             raise NoResultsFoundError
         paginator = buildPaginator(itemsFound)
@@ -239,7 +239,7 @@ class ItemSearch(commands.Cog):
                 loweredItemHuman = item.ItemHuman.lower()
                 if term.lower() not in loweredItemHuman and convert_roman_in_string(term).lower() not in loweredItemHuman and convert_int_to_roman(term).lower() not in loweredItemHuman:
                     continue
-            embedPage = await itemToEmbed(item, crateList, await addOneToItemCounter(item.ItemName)), makeFile(item)
+            embedPage = await itemToEmbed(item, crateList, await addOneToItemCounter(item.ItemName))
             sortedItems.append(embedPage)
         
         

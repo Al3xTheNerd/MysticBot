@@ -90,7 +90,8 @@ async def itemToEmbed(item: Item, crateList: List[Crate], timesSeen: int | None)
                         value = f"{item.Notes}",
                         inline = False)
 
-    embed.set_image(url=f"attachment://{item.id}.png")
+    #embed.set_image(url=f"attachment://{item.id}.png")
+    embed.set_image(url=f"{itemImageAddress.replace("Icons", "Descriptions")}/{item.id}.png")
     embed.set_thumbnail(url=f"{itemImageAddress}/{item.id}.png")
     # embed.set_thumbnail(url=f"attachment://{item.id}_icon.png")
     if timesSeen:

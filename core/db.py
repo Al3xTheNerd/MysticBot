@@ -77,6 +77,33 @@ async def getCrateList() -> List[Crate] | None:
     except:
         return None
 
+async def updateImageList(images: List[int]) -> bool:
+    """Updates the full list of existing images in db.
+    Args:
+        items (List[int]): A list of Item Objects.
+    Returns:
+        bool: True if no errors occur, False if something fucks up."""
+    try:
+        with AsyncPickleDB(databaseFile) as database:
+            await database.aset("images", images)
+        return True
+    except Exception as E:
+        raise E
+        return False
+
+async def getImageList() -> List[int]:
+    """Returns the full list of existing images.
+    Returns:
+        List[int] | None: Returns full image list, or None if no images exist."""
+    try:
+        with AsyncPickleDB(databaseFile) as database:
+            images = await database.aget("images")
+            if not images:
+                return []
+        return images
+    except:
+        return []
+
 
 async def updateTagList(tags: List[str]) -> bool:
     """Updates the full tag list in db.

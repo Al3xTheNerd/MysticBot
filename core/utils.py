@@ -65,7 +65,7 @@ def makeIcon(item: Item):
         return discord.File(path, filename = f"{item.id}_icon.png", description = f"{item.ItemName} Icon")
     else: return None
 
-def buildPaginator(pageList: List[Tuple[discord.Embed, discord.File]]):
+def buildPaginator(pageList: List[discord.Embed]):
     pagelist = [
         pages.PaginatorButton("first", label="⏪", style=discord.ButtonStyle.green),
         pages.PaginatorButton("prev", label="⬅️", style=discord.ButtonStyle.green),
@@ -74,8 +74,8 @@ def buildPaginator(pageList: List[Tuple[discord.Embed, discord.File]]):
         pages.PaginatorButton("last", label="⏩", style=discord.ButtonStyle.green)
     ]
     prettyPages = []
-    for embed, file in pageList:
-        prettyPages.append(pages.Page(embeds=[embed], files = [file]))
+    for embed in pageList:
+        prettyPages.append(pages.Page(embeds=[embed]))
     inator = pages.Paginator(
                 pages = prettyPages, # type: ignore
                 show_disabled = True,
@@ -123,8 +123,24 @@ async def updateFromSite():
         async with session.get(f"{webAddress}/items", headers = headers) as response:
             itemRes = await response.json()
         items: List[Item] = []
+        existingPictures = await db.getImageList()
+        missingPictures = []
         if itemRes["data"]:
-            items = [dictToItem(x) for x in itemRes["data"]]
+            for item in itemRes["data"]:
+                item = dictToItem(item)
+                if item.id in existingPictures:
+                    items.append(item)
+                else:
+                    print(f"Checking if picture exists for {item.id}")
+                    async with session.get(f"{webAddress.replace("/api", "")}/static/images/{server_name}_Descriptions/{item.id}.png") as response:
+                        content_type = response.headers.get("Content-Type", "").lower()
+                        if content_type.startswith("image/"):
+                            print("found picture")
+                            existingPictures.append(item.id)
+                            items.append(item)
+                        else:
+                            missingPictures.append(item)
+        await db.updateImageList(existingPictures)
         await db.updateItemList(items)
         # Get Crate List
         async with session.get(f"{webAddress}/crates") as response:
@@ -140,6 +156,8 @@ async def updateFromSite():
         if tagRes:
             tags = tagRes
         await db.updateTagList(tagRes)
+        
+    return missingPictures
         
 def roman_to_int(numeral: str):
     roman_map = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}
