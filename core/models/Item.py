@@ -91,7 +91,7 @@ async def itemToEmbed(item: Item, crateList: List[Crate], timesSeen: int | None)
                         inline = False)
 
     embed.set_image(url=f"attachment://{item.id}.png")
-    embed.set_thumbnail(url=f"https://www.mystic.atn.gg/static/images/MysticMC_Icons/{item.id}.png")
+    embed.set_thumbnail(url=f"{itemImageAddress}/{item.id}.png")
     # embed.set_thumbnail(url=f"attachment://{item.id}_icon.png")
     if timesSeen:
         embed.set_footer(text=f"Times Searched: {timesSeen}")
