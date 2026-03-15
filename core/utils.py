@@ -65,7 +65,7 @@ def makeIcon(item: Item):
         return discord.File(path, filename = f"{item.id}_icon.png", description = f"{item.ItemName} Icon")
     else: return None
 
-def buildPaginator(pageList: List[Tuple[discord.Embed, discord.File, discord.File | None]]):
+def buildPaginator(pageList: List[Tuple[discord.Embed, discord.File]]):
     pagelist = [
         pages.PaginatorButton("first", label="⏪", style=discord.ButtonStyle.green),
         pages.PaginatorButton("prev", label="⬅️", style=discord.ButtonStyle.green),
@@ -74,11 +74,8 @@ def buildPaginator(pageList: List[Tuple[discord.Embed, discord.File, discord.Fil
         pages.PaginatorButton("last", label="⏩", style=discord.ButtonStyle.green)
     ]
     prettyPages = []
-    for embed, file, maybeIcon in pageList:
-        if maybeIcon:
-            prettyPages.append(pages.Page(embeds=[embed], files = [file, maybeIcon]))
-        else:
-            prettyPages.append(pages.Page(embeds=[embed], files = [file]))
+    for embed, file in pageList:
+        prettyPages.append(pages.Page(embeds=[embed], files = [file]))
     inator = pages.Paginator(
                 pages = prettyPages, # type: ignore
                 show_disabled = True,
