@@ -131,11 +131,9 @@ async def updateFromSite():
                 if item.id in existingPictures:
                     items.append(item)
                 else:
-                    print(f"Checking if picture exists for {item.id}")
                     async with session.get(f"{webAddress.replace("/api", "")}/static/images/{server_name}_Descriptions/{item.id}.png") as response:
                         content_type = response.headers.get("Content-Type", "").lower()
                         if content_type.startswith("image/"):
-                            print("found picture")
                             existingPictures.append(item.id)
                             items.append(item)
                         else:
