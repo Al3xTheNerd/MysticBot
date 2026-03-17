@@ -64,8 +64,9 @@ class RepeatingTasksCog(commands.Cog):
                                        status = discord.Status.online)
         
     
-    @tasks.loop(minutes=60)
+    @tasks.loop(minutes=3)
     async def pullData(self):
+        print("Refreshing Data.")
         if self.updateStatus.is_running():
             self.updateStatus.stop()
         await updateFromSite()
