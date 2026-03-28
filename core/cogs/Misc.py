@@ -89,7 +89,7 @@ class Misc(commands.Cog):
     async def refreshData(self,
                           ctx: discord.ApplicationContext):
         appInfo = await self.bot.application_info()
-        if ctx.author.id == appInfo.owner.id:
+        if ctx.author.id == appInfo.owner.id or ctx.author.id == 845863303258570782: # Bot owner or Roland_Gaymer
             missingPics: List[Item] = await updateFromSite()
             print(f"{appInfo.owner.name} refreshed item data.")
             itemList = await getItemList()
