@@ -4,7 +4,8 @@ from discord.ext import pages
 import core.db as db
 from core.models.Item import Item, dictToItem
 from core.models.Crate import Crate, dictToCrate
-from core.models.Item import Item
+from core.models.MiscItem import MiscItem, dictToMiscItem
+from core.models.MiscGroup import MiscGroup, dictToMiscGroup
 from core.env import server_name, webAddress
 from PIL import Image
 import io
@@ -154,6 +155,37 @@ async def updateFromSite():
         if tagRes:
             tags = tagRes
         await db.updateTagList(tagRes)
+        
+        # Get Misc Item List
+        infoPieces = ["id", "GroupID", "ItemName", "Notes", "ItemHuman"]
+        headers = { "I-INCLUDED-INFO" : ";".join(infoPieces)}
+        async with session.get(f"{webAddress}/miscitems", headers = headers) as response:
+            itemRes = await response.json()
+        miscItems: List[MiscItem] = []
+        existingPictures = await db.getMiscImageList()
+        missingPictures = []
+        if itemRes["data"]:
+            for item in itemRes["data"]:
+                item = dictToMiscItem(item)
+                if item.id in existingPictures:
+                    miscItems.append(item)
+                else:
+                    async with session.get(f"{webAddress.replace("/api", "")}/static/images/{server_name}_Misc_Descriptions/{item.id}.png") as response:
+                        content_type = response.headers.get("Content-Type", "").lower()
+                        if content_type.startswith("image/"):
+                            existingPictures.append(item.id)
+                            miscItems.append(item)
+                        else:
+                            missingPictures.append(item)
+        await db.updateMiscImageList(existingPictures)
+        await db.updateMiscItemList(miscItems)
+        # Get Group List
+        async with session.get(f"{webAddress}/miscgroups") as response:
+            crateRes = await response.json()
+        groups: List[MiscGroup] = []
+        if crateRes:
+            groups = [dictToMiscGroup(x) for x in crateRes]
+        await db.updateGroupList(groups)
         
     return missingPictures
         

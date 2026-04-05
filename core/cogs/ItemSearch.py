@@ -3,7 +3,9 @@ from discord.ext import commands
 from discord.commands import option, SlashCommandGroup
 
 from core.db import getItemListTabComplete, getItemList, getCrateList, getTagList, addOneToItemCounter, getItemCounter
+from core.db import getMiscItemList, getGroupList, getMiscItemListTabComplete
 from core.models.Item import itemToEmbed, Item
+from core.models.MiscItem import miscItemToEmbed, MiscItem
 from core.cogs.ErrorDefinitions import *
 from core.utils import buildPaginator, combineImages, convert_roman_in_string, convert_int_to_roman
 
@@ -37,6 +39,11 @@ async def crateNameTabComplete(ctx: discord.AutocompleteContext):
         return [crate.CrateName for crate in cratelist if ctx.value.lower() in crate.CrateName.lower()]
     return None
 
+async def groupNameTabComplete(ctx: discord.AutocompleteContext):
+    groupList = await getGroupList()
+    if groupList:
+        return [group.GroupName for group in groupList if ctx.value.lower() in group.GroupName.lower()]
+    return None
 
 class ItemSearch(commands.Cog):
     def __init__(self, bot):
@@ -80,7 +87,6 @@ class ItemSearch(commands.Cog):
     @option("item_eight", description = "Pick another item!", autocomplete = itemNameTabComplete, required=False, default="")
     @option("item_nine", description = "Pick another item!", autocomplete = itemNameTabComplete, required=False, default="")
     @option("item_ten", description = "Pick another item!", autocomplete = itemNameTabComplete, required=False, default="")
-    
     async def itemCombineCommand(self,
                           ctx: discord.ApplicationContext,
                           item: str,
@@ -107,9 +113,6 @@ class ItemSearch(commands.Cog):
         comparisonObjects: List[Item] = []
         for itemName in comparisonItems:
             comparisonObjects.append([x for x in itemsList if x.ItemName == itemName][0])
-            
-        
-        
         combinationImage = combineImages(comparisonObjects)
         responseMessage = "Here is your comparison of the following items:"
         for item in comparisonObjects:
@@ -189,6 +192,30 @@ class ItemSearch(commands.Cog):
         paginator = buildPaginator(itemsFound)
         await paginator.respond(ctx.interaction, ephemeral = False)
     
+    @search.command(
+        name = "group",
+        description = "Search by Miscellanous Group."
+    )
+    @option("group", description = "Pick a group!", autocomplete = groupNameTabComplete)
+    async def groupSearchCommand(self,
+                                 ctx: discord.ApplicationContext,
+                                 group: str):
+        itemsList = await getMiscItemList()
+        if not itemsList:
+            raise NoItemsInDatabaseError
+        crateList = await getGroupList()
+        if not crateList:
+            raise NoCratesInDatabaseError
+        if group not in [potCrate.GroupName for potCrate in crateList]:
+            raise CrateNotInDatabaseError
+        crateID = [potCrate.id for potCrate in crateList if potCrate.GroupName == group][0]
+        itemsFound = [(await miscItemToEmbed(item, crateList, None)) for item in itemsList if item.GroupID == crateID]
+        if not itemsFound:
+            raise NoResultsFoundError
+        paginator = buildPaginator(itemsFound)
+        await paginator.respond(ctx.interaction, ephemeral = False)
+
+
     @search.command(
         name = "advanced",
         description = "Search by multiple constraints."
