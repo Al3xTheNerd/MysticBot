@@ -132,7 +132,7 @@ async def updateFromSite():
                 if item.id in existingPictures:
                     items.append(item)
                 else:
-                    async with session.get(f"{webAddress.replace("/api", "")}/static/images/{server_name}_Descriptions/{item.id}.png") as response:
+                    async with session.get(f"{webAddress.replace("/api", "")}/static/images/{server_name}_Descriptions/{item.id}.png") as response: # type: ignore
                         content_type = response.headers.get("Content-Type", "").lower()
                         if content_type.startswith("image/"):
                             existingPictures.append(item.id)
@@ -170,7 +170,7 @@ async def updateFromSite():
                 if item.id in existingPictures:
                     miscItems.append(item)
                 else:
-                    async with session.get(f"{webAddress.replace("/api", "")}/static/images/{server_name}_Misc_Descriptions/{item.id}.png") as response:
+                    async with session.get(f"{webAddress.replace("/api", "")}/static/images/{server_name}_Misc_Descriptions/{item.id}.png") as response: # type: ignore
                         content_type = response.headers.get("Content-Type", "").lower()
                         if content_type.startswith("image/"):
                             existingPictures.append(item.id)
