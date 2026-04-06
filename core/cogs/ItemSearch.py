@@ -115,8 +115,8 @@ class ItemSearch(commands.Cog):
             comparisonObjects.append([x for x in itemsList if x.ItemName == itemName][0])
         combinationImage = combineImages(comparisonObjects)
         responseMessage = "Here is your comparison of the following items:"
-        for item in comparisonObjects:
-            responseMessage += f"\n- {item.ItemName}"
+        for each in comparisonObjects:
+            responseMessage += f"\n- {each.ItemName}"
         await ctx.respond(responseMessage, file=combinationImage)
         
     
