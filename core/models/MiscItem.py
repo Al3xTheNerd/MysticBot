@@ -53,6 +53,8 @@ async def miscItemToEmbed(item: MiscItem, groupList: List[MiscGroup], timesSeen:
                         inline = False)
 
     embed.set_image(url=f"{itemImageAddress.replace("Icons", "Misc_Descriptions")}/{item.id}.png") # type: ignore
+    print(f"{itemImageAddress.replace("Icons", "Misc_Descriptions")}/{item.id}.png")
+    print(f"{itemImageAddress.replace("Icons", "Misc_Icons")}/{item.id}.png")
     embed.set_thumbnail(url=f"{itemImageAddress.replace("Icons", "Misc_Icons")}/{item.id}.png") # type: ignore
     if timesSeen:
         embed.set_footer(text=f"Times Searched: {timesSeen}")
