@@ -31,21 +31,29 @@ def dictToMiscItem(item: Dict[str, str]):
 
 
 async def miscItemToEmbed(item: MiscItem, groupList: List[MiscGroup], timesSeen: int | None) -> discord.Embed:
-    embed = discord.Embed(title = f"{item.ItemName}",
-                      url=f"{itemSoloAddress}/{item.id}",
+    group = [x for x in groupList if item.GroupID == x.id][0]
+    embed = discord.Embed(title = f"{group.GroupName}",
+                      url=f"{itemSoloAddress.replace("item", "group")}/{group.URLTag}", # type: ignore
                       colour=0x00b0f4)
-    if item.GroupID:
-        groupName = [x for x in groupList if item.GroupID == x.id][0].GroupName
-        embed.add_field(name = "Group",
-                        value = f"{groupName}",
-                        inline = True)
+    
+    embed.add_field(name = "Item",
+                    value = f"{item.ItemName}",
+                    inline = False)
+    if group.ReleaseDate:
+        embed.add_field(name = "Group Release Date",
+                        value = f"{group.ReleaseDate}",
+                        inline = False)
+    if group.Notes:
+        embed.add_field(name = "Group Notes",
+                        value = f"{group.Notes}",
+                        inline = False)
     if item.Notes:
-        embed.add_field(name = "Notes",
+        embed.add_field(name = "Item Notes",
                         value = f"{item.Notes}",
                         inline = False)
 
-    embed.set_image(url=f"{itemImageAddress.replace("Icons", "Misc_Descriptions")}/{item.id}.png")
-    embed.set_thumbnail(url=f"{itemImageAddress.replace("Icons", "Misc_Icons")}/{item.id}.png")
+    embed.set_image(url=f"{itemImageAddress.replace("Icons", "Misc_Descriptions")}/{item.id}.png") # type: ignore
+    embed.set_thumbnail(url=f"{itemImageAddress.replace("Icons", "Misc_Icons")}/{item.id}.png") # type: ignore
     if timesSeen:
         embed.set_footer(text=f"Times Searched: {timesSeen}")
     return embed
