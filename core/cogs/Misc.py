@@ -88,6 +88,7 @@ class Misc(commands.Cog):
         description = "Bot manager can refresh item data with this command.")
     async def refreshData(self,
                           ctx: discord.ApplicationContext):
+        await ctx.defer()
         appInfo = await self.bot.application_info()
         if ctx.author.id == appInfo.owner.id or ctx.author.id == 845863303258570782: # Bot owner or Roland_Gaymer
             missingPics: List[Item] = await updateFromSite()
@@ -125,8 +126,7 @@ class Misc(commands.Cog):
                             inline=False)
             embed.set_footer(text=f"{appInfo.owner.name}",
                             icon_url=f"{appInfo.owner.display_avatar.url}")
-        
-        await ctx.respond(embed = embed)
+        await ctx.followup.send(embed = embed)
     
     
 def setup(bot: discord.Bot):
