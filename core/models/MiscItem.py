@@ -32,6 +32,7 @@ def dictToMiscItem(item: Dict[str, str]):
 
 async def miscItemToEmbed(item: MiscItem, groupList: List[MiscGroup], timesSeen: int | None) -> discord.Embed:
     group = [x for x in groupList if item.GroupID == x.id][0]
+    print(f"{itemSoloAddress.replace("item", "group")}/{group.URLTag}")
     embed = discord.Embed(title = f"{group.GroupName}",
                       url=f"{itemSoloAddress.replace("item", "group")}/{group.URLTag}", # type: ignore
                       colour=0x00b0f4)
@@ -53,8 +54,6 @@ async def miscItemToEmbed(item: MiscItem, groupList: List[MiscGroup], timesSeen:
                         inline = False)
 
     embed.set_image(url=f"{itemImageAddress.replace("Icons", "Misc_Descriptions")}/{item.id}.png") # type: ignore
-    print(f"{itemImageAddress.replace("Icons", "Misc_Descriptions")}/{item.id}.png")
-    print(f"{itemImageAddress.replace("Icons", "Misc_Icons")}/{item.id}.png")
     embed.set_thumbnail(url=f"{itemImageAddress.replace("Icons", "Misc_Icons")}/{item.id}.png") # type: ignore
     if timesSeen:
         embed.set_footer(text=f"Times Searched: {timesSeen}")
