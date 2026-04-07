@@ -163,7 +163,7 @@ async def updateFromSite():
             itemRes = await response.json()
         miscItems: List[MiscItem] = []
         existingPictures = await db.getMiscImageList()
-        missingPictures = []
+        missingMiscPictures = []
         if itemRes["data"]:
             for item in itemRes["data"]:
                 item = dictToMiscItem(item)
@@ -176,7 +176,7 @@ async def updateFromSite():
                             existingPictures.append(item.id)
                             miscItems.append(item)
                         else:
-                            missingPictures.append(item)
+                            missingMiscPictures.append(item)
         await db.updateMiscImageList(existingPictures)
         await db.updateMiscItemList(miscItems)
         # Get Group List
@@ -187,7 +187,7 @@ async def updateFromSite():
             groups = [dictToMiscGroup(x) for x in crateRes]
         await db.updateGroupList(groups)
         
-    return missingPictures
+    return missingPictures, missingMiscPictures
         
 def roman_to_int(numeral: str):
     roman_map = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}

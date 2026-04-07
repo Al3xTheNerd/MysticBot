@@ -6,7 +6,8 @@ from core.cogs.ErrorDefinitions import *
 from core.db import getItemListTabComplete, getItemList, getCrateList, getTagList, addOneToItemCounter, getItemCounter
 from core.utils import symbolsToRemove, updateFromSite, buildPopularityPaginator
 from core.models.Item import Item
-from typing import List
+from core.models.MiscItem import MiscItem
+from typing import List, Tuple
 
 
 class Misc(commands.Cog):
@@ -91,17 +92,22 @@ class Misc(commands.Cog):
         await ctx.defer()
         appInfo = await self.bot.application_info()
         if ctx.author.id == appInfo.owner.id or ctx.author.id == 845863303258570782: # Bot owner or Roland_Gaymer
-            missingPics: List[Item] = await updateFromSite()
+            missingPics, missingMiscPics = await updateFromSite()
             print(f"{appInfo.owner.name} refreshed item data.")
             itemList = await getItemList()
             crateList = await getCrateList()
             tagList = await getTagList()
                 
             embed = discord.Embed(title="Data Refreshed", colour=0x3c7186)
+            ret = "The following items have not had images generated yet, and will thus be excluded.```"
             if missingPics:
-                ret = "The following items have not had images generated yet, and will thus be excluded.```"
                 for item in missingPics:
                     ret += f"\n{item.id} - {item.ItemName}"
+                embed.description = ret
+            if missingMiscPics:
+                for item in missingMiscPics:
+                    ret += f"\n{item.id} - {item.ItemName}"
+            if missingMiscPics or missingPics:
                 ret += "```"
                 embed.description = ret
             if itemList:
