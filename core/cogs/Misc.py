@@ -3,7 +3,7 @@ from discord.ext import commands
 
 
 from core.cogs.ErrorDefinitions import *
-from core.db import getItemListTabComplete, getItemList, getCrateList, getTagList, addOneToItemCounter, getItemCounter
+from core.db import getItemListTabComplete, getItemList, getCrateList, getTagList, addOneToItemCounter, getItemCounter, getGroupList, getMiscItemList
 from core.utils import symbolsToRemove, updateFromSite, buildPopularityPaginator
 from core.models.Item import Item
 from core.models.MiscItem import MiscItem
@@ -97,6 +97,8 @@ class Misc(commands.Cog):
             itemList = await getItemList()
             crateList = await getCrateList()
             tagList = await getTagList()
+            groupList = await getGroupList()
+            miscItemList = await getMiscItemList()
                 
             embed = discord.Embed(title="Data Refreshed", colour=0x3c7186)
             ret = "The following items have not had images generated yet, and will thus be excluded.```"
@@ -121,6 +123,14 @@ class Misc(commands.Cog):
             if tagList:
                 embed.add_field(name="Tag Count:",
                                 value=f"{len(tagList)}",
+                                inline=False)
+            if groupList:
+                embed.add_field(name="Miscellaneous Group Count:",
+                                value=f"{len(groupList)}",
+                                inline=False)
+            if miscItemList:
+                embed.add_field(name="Miscellaneous Item Count:",
+                                value=f"{len(miscItemList)}",
                                 inline=False)
             embed.set_footer(text=f"{appInfo.owner.name}",
                             icon_url=f"{appInfo.owner.display_avatar.url}")
