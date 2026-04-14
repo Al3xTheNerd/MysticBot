@@ -19,6 +19,7 @@ class MiscItem:
     ItemName: str
     Notes: str
     ItemHuman: str
+    ImageType: str
 
 def dictToMiscItem(item: Dict[str, str]):
     return MiscItem(
@@ -26,7 +27,8 @@ def dictToMiscItem(item: Dict[str, str]):
             int(item["GroupID"]),
             item["ItemName"],
             item["Notes"],
-            item["ItemHuman"]
+            item["ItemHuman"],
+            item["ImageType"]
             ) # type: ignore
 
 
@@ -53,7 +55,7 @@ async def miscItemToEmbed(item: MiscItem, groupList: List[MiscGroup], timesSeen:
                         inline = False)
 
     embed.set_image(url=f"{itemImageAddress.replace("Icons", "Misc_Descriptions")}/{item.id}.png") # type: ignore
-    embed.set_thumbnail(url=f"{itemImageAddress.replace("Icons", "Misc_Icons")}/{item.id}.png") # type: ignore
+    embed.set_thumbnail(url=f"{itemImageAddress.replace("Icons", "Misc_Icons")}/{item.id}.{item.ImageType}") # type: ignore
     if timesSeen:
         embed.set_footer(text=f"Times Searched: {timesSeen}")
     return embed

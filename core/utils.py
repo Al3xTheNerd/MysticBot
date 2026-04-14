@@ -119,7 +119,7 @@ async def crateIDToCrateName(id: int) -> str | None:
 async def updateFromSite():
     async with aiohttp.ClientSession() as session:
         # Get Item List
-        infoPieces = ["id", "CrateID", "TagPrimary", "TagSecondary", "TagTertiary", "TagQuaternary", "TagQuinary", "TagSenary", "TagSeptenary", "WinPercentage", "RarityHuman", "ItemName", "Notes", "ItemHuman"]
+        infoPieces = ["id", "CrateID", "TagPrimary", "TagSecondary", "TagTertiary", "TagQuaternary", "TagQuinary", "TagSenary", "TagSeptenary", "WinPercentage", "RarityHuman", "ItemName", "Notes", "ItemHuman", "ImageType"]
         headers = { "I-INCLUDED-INFO" : ";".join(infoPieces)}
         async with session.get(f"{webAddress}/items", headers = headers) as response:
             itemRes = await response.json()
@@ -157,7 +157,7 @@ async def updateFromSite():
         await db.updateTagList(tagRes)
         
         # Get Misc Item List
-        infoPieces = ["id", "GroupID", "ItemName", "Notes", "ItemHuman"]
+        infoPieces = ["id", "GroupID", "ItemName", "Notes", "ItemHuman", "ImageType"]
         headers = { "I-INCLUDED-INFO" : ";".join(infoPieces)}
         async with session.get(f"{webAddress}/miscitems", headers = headers) as response:
             itemRes = await response.json()

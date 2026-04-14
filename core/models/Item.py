@@ -28,6 +28,7 @@ class Item:
     ItemName: str    
     Notes: str
     ItemHuman: str
+    ImageType: str
 
 def dictToItem(item: Dict[str, str]):
     return Item(
@@ -44,7 +45,8 @@ def dictToItem(item: Dict[str, str]):
             item["RarityHuman"],
             item["ItemName"],
             item["Notes"],
-            item["ItemHuman"]
+            item["ItemHuman"],
+            item["ImageType"]
             ) # type: ignore
 
 
@@ -92,7 +94,8 @@ async def itemToEmbed(item: Item, crateList: List[Crate], timesSeen: int | None)
 
     #embed.set_image(url=f"attachment://{item.id}.png")
     embed.set_image(url=f"{itemImageAddress.replace("Icons", "Descriptions")}/{item.id}.png") # type: ignore
-    embed.set_thumbnail(url=f"{itemImageAddress}/{item.id}.png") 
+    embed.set_thumbnail(url=f"{itemImageAddress}/{item.id}.{item.ImageType}") 
+    print(f"{itemImageAddress}/{item.id}.{item.ImageType}")
     # embed.set_thumbnail(url=f"attachment://{item.id}_icon.png")
     if timesSeen:
         embed.set_footer(text=f"Times Searched: {timesSeen}")
