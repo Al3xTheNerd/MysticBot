@@ -72,6 +72,8 @@ class ItemSearch(commands.Cog):
         itemObject = [x for x in itemsList if x.ItemName == item][0]
         timesRequested = await addOneToItemCounter(item)
         embed = await itemToEmbed(itemObject, crateList, timesRequested)
+        if embed and embed.image:
+            print(embed.image.url)
         await ctx.respond(embed = embed)
 
     @search.command(
