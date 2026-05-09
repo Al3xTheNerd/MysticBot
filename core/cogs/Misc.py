@@ -132,8 +132,8 @@ class Misc(commands.Cog):
                 embed.add_field(name="Miscellaneous Item Count:",
                                 value=f"{len(miscItemList)}",
                                 inline=False)
-            embed.set_footer(text=f"{appInfo.owner.name}",
-                            icon_url=f"{appInfo.owner.display_avatar.url}")
+            embed.set_footer(text=f"{ctx.author.name}",
+                            icon_url=f"{ctx.author.display_avatar.url}")
             
         else:
             embed = discord.Embed(title="Unauthorized user.", colour=0x3c7186)

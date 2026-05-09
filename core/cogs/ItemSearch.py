@@ -177,6 +177,7 @@ class ItemSearch(commands.Cog):
     async def crateSearchCommand(self,
                                  ctx: discord.ApplicationContext,
                                  crate: str):
+        await ctx.defer()
         itemsList = await getItemList()
         if not itemsList:
             raise NoItemsInDatabaseError
